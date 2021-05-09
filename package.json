@@ -4,7 +4,8 @@
   "description": "Shopify backend internship challenge",
   "main": "index.js",
   "scripts": {
-    "test": "mocha ./tests"
+    "test": "mocha ./tests",
+    "start": "nodemon ./app.js"
   },
   "author": "",
   "license": "ISC",
