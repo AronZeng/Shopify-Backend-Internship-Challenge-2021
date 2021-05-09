@@ -59,7 +59,7 @@ const transactionSchema = Schema({
 });
 ```
 
-Next, the `routes` folder contains the endpoints that are made available by the application. There is a route for each of the models. In addition, there is also
+Next, the `routes` folder contains the endpoints that are made available by the application. There is a file for each of the models. In addition, there is also
 a file named `auth.js` for user authentication (i.e logging in). Each of the models have their corresponding GET, POST, PUT, and DELETE endpoints in their
 respective route file. 
 
