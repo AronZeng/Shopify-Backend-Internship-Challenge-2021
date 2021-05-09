@@ -1,9 +1,6 @@
 const Image = require("../model/image");
 const jwt = require("jsonwebtoken");
-const fs = require("fs");
-const path = require("path");
 const generateResponse = require("../helper/generateResponse");
-const { request } = require("express");
 
 exports.readOne = async function (req, res, next) {
   try {
@@ -11,12 +8,14 @@ exports.readOne = async function (req, res, next) {
     if (image.isDeleted) {
       return generateResponse(res, 400, {}, "The image was deleted");
     }
+    //verify that the user has permissions to get the image
     if (
-      jwt.decode(req.headers["authorization"]).userId == image.owner.toString()
+      !image.public &&
+      jwt.decode(req.headers["authorization"]).userId != image.owner.toString()
     ) {
-      return generateResponse(res, 200, image);
-    } else {
       return generateResponse(res, 401);
+    } else {
+      return generateResponse(res, 200, image);
     }
   } catch (err) {
     return generateResponse(res, 500);
@@ -113,7 +112,8 @@ exports.update = async function (req, res, next) {
 
 exports.delete = async function (req, res, next) {
   try {
-    const deletedImage = await Image.findByIdAndUpdate(req.params.id, {
+    //soft deletes the image
+    await Image.findByIdAndUpdate(req.params.id, {
       isDeleted: true,
     });
     return generateResponse(res, 200);

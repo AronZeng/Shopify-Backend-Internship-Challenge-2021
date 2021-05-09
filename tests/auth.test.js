@@ -43,4 +43,20 @@ describe("Auth Tests", () => {
     //note the units are in seconds so the difference should be 36000 seconds
     expect(decodedToken.exp - decodedToken.iat).to.equal(36000);
   });
+  it("Cannot login with invalid credentials", async () => {
+    const hashedPassword = bcrypt.hashSync(user.password, 10);
+    await User.create({
+      ...user,
+      password: hashedPassword,
+    });
+
+    let res = await request(app)
+      .post("/login")
+      .set("Content-Type", "application/json")
+      .send({ username: user.username, password: "wrongpassword" });
+
+    //Assertions
+    expect(res.statusCode).to.equal(401);
+    expect(res.body.message).to.equal("Invalid Login");
+  });
 });

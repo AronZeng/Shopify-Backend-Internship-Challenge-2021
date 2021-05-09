@@ -26,8 +26,3 @@ exports.login = async function (req, res, next) {
     }
   );
 };
-
-// exports.logout = async function(req, res, next) {
-//   const token = req.headers['authorization']
-//   const deletedToken =
-// }

@@ -35,13 +35,6 @@ const image_one = {
   inventory: 100,
 };
 
-const image_two = {
-  name: "Aron",
-  description: "A good looking fella",
-  tags: ["mcm", "model"],
-  inventory: 9000,
-};
-
 const transaction_one = {
   price: 100,
   quantity: 1,
@@ -76,7 +69,7 @@ describe("Transaction Tests", () => {
   //when all the tests finish running then we close the database
   after(async () => await dbHelper.closeDatabase());
 
-  //the user tests start here
+  //the transaction tests start here
   it("Can create transaction", async () => {
     const hashedPassword = bcrypt.hashSync(user.password, 10);
     const savedUser = await User.create({ ...user, password: hashedPassword });
@@ -277,7 +270,7 @@ describe("Transaction Tests", () => {
       ...user2,
       password: hashedPassword,
     });
-    const savedUser3 = await User.create({
+    await User.create({
       ...user3,
       password: hashedPassword,
     });
@@ -458,19 +451,19 @@ describe("Transaction Tests", () => {
       .attach("file", imagePath)
       .field(image_one);
 
-    const transactionOne = await Transaction.create({
+    await Transaction.create({
       ...transaction_one,
       image: imageCreateResponse.body.data._id,
       seller: savedUser._id.toString(),
       buyer: savedUser2._id.toString(),
     });
-    const transactionTwo = await Transaction.create({
+    await Transaction.create({
       ...transaction_two,
       image: imageCreateResponse.body.data._id,
       seller: savedUser._id.toString(),
       buyer: savedUser2._id.toString(),
     });
-    const transactionThree = await Transaction.create({
+    await Transaction.create({
       ...transaction_three,
       image: imageCreateResponse.body.data._id,
       seller: savedUser._id.toString(),
@@ -542,19 +535,19 @@ describe("Transaction Tests", () => {
       .attach("file", imagePath)
       .field(image_one);
 
-    const transactionOne = await Transaction.create({
+    await Transaction.create({
       ...transaction_one,
       image: imageCreateResponse.body.data._id,
       seller: savedUser._id.toString(),
       buyer: savedUser2._id.toString(),
     });
-    const transactionTwo = await Transaction.create({
+    await Transaction.create({
       ...transaction_two,
       image: imageCreateResponse.body.data._id,
       seller: savedUser._id.toString(),
       buyer: savedUser2._id.toString(),
     });
-    const transactionThree = await Transaction.create({
+    await Transaction.create({
       ...transaction_three,
       image: imageCreateResponse.body.data._id,
       seller: savedUser._id.toString(),
@@ -622,19 +615,19 @@ describe("Transaction Tests", () => {
       .attach("file", imagePath)
       .field(image_one);
 
-    const transactionOne = await Transaction.create({
+    await Transaction.create({
       ...transaction_one,
       image: imageCreateResponse.body.data._id,
       seller: savedUser._id.toString(),
       buyer: savedUser2._id.toString(),
     });
-    const transactionTwo = await Transaction.create({
+    await Transaction.create({
       ...transaction_two,
       image: imageCreateResponse.body.data._id,
       seller: savedUser._id.toString(),
       buyer: savedUser2._id.toString(),
     });
-    const transactionThree = await Transaction.create({
+    await Transaction.create({
       ...transaction_three,
       image: imageCreateResponse.body.data._id,
       seller: savedUser3._id.toString(),
@@ -711,19 +704,19 @@ describe("Transaction Tests", () => {
       .attach("file", imagePath)
       .field(image_one);
 
-    const transactionOne = await Transaction.create({
+    await Transaction.create({
       ...transaction_one,
       image: imageCreateResponse.body.data._id,
       seller: savedUser._id.toString(),
       buyer: savedUser2._id.toString(),
     });
-    const transactionTwo = await Transaction.create({
+    await Transaction.create({
       ...transaction_two,
       image: imageCreateResponse.body.data._id,
       seller: savedUser._id.toString(),
       buyer: savedUser2._id.toString(),
     });
-    const transactionThree = await Transaction.create({
+    await Transaction.create({
       ...transaction_three,
       image: imageCreateResponse2.body.data._id,
       seller: savedUser._id.toString(),
@@ -801,19 +794,19 @@ describe("Transaction Tests", () => {
       .attach("file", imagePath)
       .field(image_one);
 
-    const transactionOne = await Transaction.create({
+    await Transaction.create({
       ...transaction_one,
       image: imageCreateResponse.body.data._id,
       seller: savedUser._id.toString(),
       buyer: savedUser2._id.toString(),
     });
-    const transactionTwo = await Transaction.create({
+    await Transaction.create({
       ...transaction_two,
       image: imageCreateResponse.body.data._id,
       seller: savedUser._id.toString(),
       buyer: savedUser2._id.toString(),
     });
-    const transactionThree = await Transaction.create({
+    await Transaction.create({
       ...transaction_three,
       image: imageCreateResponse2.body.data._id,
       seller: savedUser._id.toString(),
@@ -891,19 +884,19 @@ describe("Transaction Tests", () => {
       .attach("file", imagePath)
       .field(image_one);
 
-    const transactionOne = await Transaction.create({
+    await Transaction.create({
       ...transaction_one,
       image: imageCreateResponse.body.data._id,
       seller: savedUser._id.toString(),
       buyer: savedUser2._id.toString(),
     });
-    const transactionTwo = await Transaction.create({
+    await Transaction.create({
       ...transaction_two,
       image: imageCreateResponse.body.data._id,
       seller: savedUser._id.toString(),
       buyer: savedUser2._id.toString(),
     });
-    const transactionThree = await Transaction.create({
+    await Transaction.create({
       ...transaction_three,
       image: imageCreateResponse2.body.data._id,
       seller: savedUser._id.toString(),
@@ -973,19 +966,19 @@ describe("Transaction Tests", () => {
       .attach("file", imagePath)
       .field(image_one);
 
-    const transactionOne = await Transaction.create({
+    await Transaction.create({
       ...transaction_one,
       image: imageCreateResponse.body.data._id,
       seller: savedUser._id.toString(),
       buyer: savedUser2._id.toString(),
     });
-    const transactionTwo = await Transaction.create({
+    await Transaction.create({
       ...transaction_two,
       image: imageCreateResponse.body.data._id,
       seller: savedUser._id.toString(),
       buyer: savedUser2._id.toString(),
     });
-    const transactionThree = await Transaction.create({
+    await Transaction.create({
       ...transaction_three,
       image: imageCreateResponse2.body.data._id,
       seller: savedUser._id.toString(),

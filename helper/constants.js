@@ -11,10 +11,7 @@ module.exports = {
     201: "Created",
     400: "Bad Request",
     401: "Unauthorized",
-    403: "Forbidden",
     404: "Not Found",
-    409: "Conflict",
-    412: "Precondition Failed",
     500: "Internal Server Error",
   },
 };

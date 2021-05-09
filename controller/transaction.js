@@ -4,12 +4,12 @@ const User = require("../model/user");
 const jwt = require("jsonwebtoken");
 const { transactionStatus } = require("../helper/constants");
 const generateResponse = require("../helper/generateResponse");
-const { update } = require("../model/user");
 
 exports.readOne = async function (req, res, next) {
   try {
     const userId = jwt.decode(req.headers["authorization"]).userId;
     const transaction = await Transaction.findById(req.params.id);
+    //have to cast the buyer and seller to string since mongoose returns it in the ObjectId type
     if (
       transaction.buyer.toString() == userId ||
       transaction.seller.toString() == userId
@@ -24,6 +24,7 @@ exports.readOne = async function (req, res, next) {
 };
 
 exports.readMany = async function (req, res, next) {
+  //limit and skip are used for pagination
   const limit = parseInt(req.query.limit) || 10;
   const skip = req.query.page ? (parseInt(req.query.page) - 1) * limit : 0;
   try {
@@ -62,17 +63,18 @@ exports.readMany = async function (req, res, next) {
 exports.create = async function (req, res, next) {
   let resObj = {};
   try {
-    //validate that the transaction is valid (i.e the inventory is sufficient and the image is still available)
     const image = await Image.findOne({
       _id: req.body.image,
       owner: req.body.seller,
     });
+    //validate the transaction (i.e the inventory is sufficient and the image is still available)
     if (image && image.isDeleted) {
       return generateResponse(res, 400, {}, "Image was deleted");
     }
     const buyer = await User.findById(req.body.buyer);
     if (
       image &&
+      image.isAvailable &&
       image.inventory >= req.body.quantity &&
       buyer.balance >= req.body.quantity * req.body.price
     ) {
@@ -110,6 +112,10 @@ exports.update = async function (req, res, next) {
   let resObj = {};
   try {
     const oldTransaction = await Transaction.findById(req.params.id);
+    //if the images are returned then buyer, seller, and image have to be updated accordingly
+    //buyer gets their money back (i.e incrementing their balance)
+    //seller returns the money (i.e decrementing their balance)
+    //image inventory is replenished (i.e incremening their inventory number)
     if (
       req.body &&
       oldTransaction.status != transactionStatus.ORDER_RETURNED &&
@@ -154,10 +160,7 @@ exports.update = async function (req, res, next) {
 
 exports.delete = async function (req, res, next) {
   try {
-    const deletedTransaction = await Transaction.findByIdAndUpdate(
-      req.params.id,
-      { isDeleted: true }
-    );
+    await Transaction.findByIdAndUpdate(req.params.id, { isDeleted: true });
     return generateResponse(res, 200);
   } catch (err) {
     return generateResponse(res, 500);

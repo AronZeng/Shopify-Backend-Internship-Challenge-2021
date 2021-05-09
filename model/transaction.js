@@ -1,7 +1,8 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
+const { transactionStatus } = require("../helper/constants");
 
-const statuses = [0, 1, 2, 3];
+const statuses = [...Object.values(transactionStatus)];
 
 const transactionSchema = Schema({
   buyer: { type: Schema.Types.ObjectId, ref: "user", required: true },

@@ -12,7 +12,6 @@ exports.readOne = async function (req, res, next) {
 };
 
 exports.create = async function (req, res, next) {
-  const test = await User.find({});
   bcrypt.hash(req.body.password, 10, async function (err, hash) {
     try {
       const newUser = {

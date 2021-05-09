@@ -53,7 +53,7 @@ describe("Image Tests", () => {
   //when all the tests finish running then we close the database
   after(async () => await dbHelper.closeDatabase());
 
-  //the user tests start here
+  //the image tests start here
   it("Can create image", async () => {
     const hashedPassword = bcrypt.hashSync(user.password, 10);
     const savedUser = await User.create({ ...user, password: hashedPassword });
@@ -75,7 +75,7 @@ describe("Image Tests", () => {
     //Assertions
     //TODO: find a way to compare the file returned from the api and the original uploaded file
     expect(res.statusCode).to.equal(201);
-    //js equality is kind of weird so chai provides the alternative "eql"
+    //js equality is kind of weird so chai provides the alternative "eql" for checking arrays
     expect(res.body.data.tags).to.eql(image_one.tags);
     expect(res.body.data.name).to.equal(image_one.name);
     expect(res.body.data.description).to.equal(image_one.description);
@@ -127,12 +127,12 @@ describe("Image Tests", () => {
 
   it("Cannot get a private image belonging to another user", async () => {
     const hashedPassword = bcrypt.hashSync(user.password, 10);
-    const savedUser = await User.create({
+    await User.create({
       ...user,
       password: hashedPassword,
     });
 
-    const unauthorizedUser = await User.create({
+    await User.create({
       ...user2,
       password: hashedPassword,
     });
@@ -164,9 +164,7 @@ describe("Image Tests", () => {
       });
 
     //Assertions
-    //TODO: find a way to compare the file returned from the api and the original uploaded file
     expect(res.statusCode).to.equal(401);
-    //js equality is kind of weird so chai provides the alternative "eql"
     expect(res.body.message).to.equal("Unauthorized");
   });
 
@@ -177,7 +175,7 @@ describe("Image Tests", () => {
       password: hashedPassword,
     });
 
-    const savedUser2 = await User.create({
+    await User.create({
       ...user2,
       password: hashedPassword,
     });
@@ -187,7 +185,7 @@ describe("Image Tests", () => {
       .set("Content-Type", "application/json")
       .send({ username: user.username, password: user.password });
 
-    const userImageOne = await request(app)
+    await request(app)
       .post("/images")
       .set({
         "Content-Type": "application/json",
@@ -196,7 +194,7 @@ describe("Image Tests", () => {
       .attach("file", imagePath)
       .field(image_one);
 
-    const userImageTwo = await request(app)
+    await request(app)
       .post("/images")
       .set({
         "Content-Type": "application/json",
@@ -210,7 +208,7 @@ describe("Image Tests", () => {
       .set("Content-Type", "application/json")
       .send({ username: user2.username, password: user2.password });
 
-    const user2ImageOne = await request(app)
+    await request(app)
       .post("/images")
       .set({
         "Content-Type": "application/json",
@@ -290,7 +288,7 @@ describe("Image Tests", () => {
       password: hashedPassword,
     });
 
-    const savedUser2 = await User.create({
+    await User.create({
       ...user2,
       password: hashedPassword,
     });
@@ -300,7 +298,7 @@ describe("Image Tests", () => {
       .set("Content-Type", "application/json")
       .send({ username: user.username, password: user.password });
 
-    const userImageOne = await request(app)
+    await request(app)
       .post("/images")
       .set({
         "Content-Type": "application/json",
@@ -309,7 +307,7 @@ describe("Image Tests", () => {
       .attach("file", imagePath)
       .field(image_one);
 
-    const userImageTwo = await request(app)
+    await request(app)
       .post("/images")
       .set({
         "Content-Type": "application/json",
@@ -323,7 +321,7 @@ describe("Image Tests", () => {
       .set("Content-Type", "application/json")
       .send({ username: user2.username, password: user2.password });
 
-    const user2ImageOne = await request(app)
+    await request(app)
       .post("/images")
       .set({
         "Content-Type": "application/json",
@@ -361,7 +359,7 @@ describe("Image Tests", () => {
       password: hashedPassword,
     });
 
-    const savedUser2 = await User.create({
+    await User.create({
       ...user2,
       password: hashedPassword,
     });
@@ -371,7 +369,7 @@ describe("Image Tests", () => {
       .set("Content-Type", "application/json")
       .send({ username: user.username, password: user.password });
 
-    const userImageOne = await request(app)
+    await request(app)
       .post("/images")
       .set({
         "Content-Type": "application/json",
@@ -380,7 +378,7 @@ describe("Image Tests", () => {
       .attach("file", imagePath)
       .field(image_one);
 
-    const userImageTwo = await request(app)
+    await request(app)
       .post("/images")
       .set({
         "Content-Type": "application/json",
@@ -394,7 +392,7 @@ describe("Image Tests", () => {
       .set("Content-Type", "application/json")
       .send({ username: user2.username, password: user2.password });
 
-    const user2ImageOne = await request(app)
+    await request(app)
       .post("/images")
       .set({
         "Content-Type": "application/json",
@@ -432,7 +430,7 @@ describe("Image Tests", () => {
       password: hashedPassword,
     });
 
-    const savedUser2 = await User.create({
+    await User.create({
       ...user2,
       password: hashedPassword,
     });
@@ -442,7 +440,7 @@ describe("Image Tests", () => {
       .set("Content-Type", "application/json")
       .send({ username: user.username, password: user.password });
 
-    const userImageOne = await request(app)
+    await request(app)
       .post("/images")
       .set({
         "Content-Type": "application/json",
@@ -451,7 +449,7 @@ describe("Image Tests", () => {
       .attach("file", imagePath)
       .field(image_one);
 
-    const userImageTwo = await request(app)
+    await request(app)
       .post("/images")
       .set({
         "Content-Type": "application/json",
@@ -465,7 +463,7 @@ describe("Image Tests", () => {
       .set("Content-Type", "application/json")
       .send({ username: user2.username, password: user2.password });
 
-    const user2ImageOne = await request(app)
+    await request(app)
       .post("/images")
       .set({
         "Content-Type": "application/json",
@@ -504,7 +502,7 @@ describe("Image Tests", () => {
       password: hashedPassword,
     });
 
-    const savedUser2 = await User.create({
+    await User.create({
       ...user2,
       password: hashedPassword,
     });
@@ -514,7 +512,7 @@ describe("Image Tests", () => {
       .set("Content-Type", "application/json")
       .send({ username: user.username, password: user.password });
 
-    const userImageOne = await request(app)
+    await request(app)
       .post("/images")
       .set({
         "Content-Type": "application/json",
@@ -523,7 +521,7 @@ describe("Image Tests", () => {
       .attach("file", imagePath)
       .field(image_one);
 
-    const userImageTwo = await request(app)
+    await request(app)
       .post("/images")
       .set({
         "Content-Type": "application/json",
@@ -537,7 +535,7 @@ describe("Image Tests", () => {
       .set("Content-Type", "application/json")
       .send({ username: user2.username, password: user2.password });
 
-    const user2ImageOne = await request(app)
+    await request(app)
       .post("/images")
       .set({
         "Content-Type": "application/json",
@@ -576,7 +574,7 @@ describe("Image Tests", () => {
       password: hashedPassword,
     });
 
-    const savedUser2 = await User.create({
+    await User.create({
       ...user2,
       password: hashedPassword,
     });
@@ -586,7 +584,7 @@ describe("Image Tests", () => {
       .set("Content-Type", "application/json")
       .send({ username: user.username, password: user.password });
 
-    const userImageOne = await request(app)
+    await request(app)
       .post("/images")
       .set({
         "Content-Type": "application/json",
@@ -595,7 +593,7 @@ describe("Image Tests", () => {
       .attach("file", imagePath)
       .field(image_one);
 
-    const userImageTwo = await request(app)
+    await request(app)
       .post("/images")
       .set({
         "Content-Type": "application/json",
@@ -609,7 +607,7 @@ describe("Image Tests", () => {
       .set("Content-Type", "application/json")
       .send({ username: user2.username, password: user2.password });
 
-    const user2ImageOne = await request(app)
+    await request(app)
       .post("/images")
       .set({
         "Content-Type": "application/json",
@@ -653,7 +651,7 @@ describe("Image Tests", () => {
       password: hashedPassword,
     });
 
-    const savedUser2 = await User.create({
+    await User.create({
       ...user2,
       password: hashedPassword,
     });
@@ -663,7 +661,7 @@ describe("Image Tests", () => {
       .set("Content-Type", "application/json")
       .send({ username: user.username, password: user.password });
 
-    const userImageOne = await request(app)
+    await request(app)
       .post("/images")
       .set({
         "Content-Type": "application/json",
@@ -672,7 +670,7 @@ describe("Image Tests", () => {
       .attach("file", imagePath)
       .field(image_one);
 
-    const userImageTwo = await request(app)
+    await request(app)
       .post("/images")
       .set({
         "Content-Type": "application/json",
@@ -686,7 +684,7 @@ describe("Image Tests", () => {
       .set("Content-Type", "application/json")
       .send({ username: user2.username, password: user2.password });
 
-    const user2ImageOne = await request(app)
+    await request(app)
       .post("/images")
       .set({
         "Content-Type": "application/json",
@@ -720,7 +718,7 @@ describe("Image Tests", () => {
   });
   it("Can delete an image", async () => {
     const hashedPassword = bcrypt.hashSync(user.password, 10);
-    const savedUser = await User.create({
+    await User.create({
       ...user,
       password: hashedPassword,
     });
@@ -752,7 +750,7 @@ describe("Image Tests", () => {
   });
   it("Cannot get a deleted image", async () => {
     const hashedPassword = bcrypt.hashSync(user.password, 10);
-    const savedUser = await User.create({
+    await User.create({
       ...user,
       password: hashedPassword,
     });
