@@ -99,7 +99,9 @@ port, database name, and token secret have been hard coded.
 ### POST /login
 
 Used to log a user into the application.
+
 Requires `username` and `password` in the body.
+
 Example:
 
 ```javascript
@@ -112,12 +114,15 @@ Example:
 ### GET /users/:id
 
 Used to fetch a specific user using their id.
+
 Requires `id` of the user in the params.
 
 ### POST /users
 
 Used to create a new user.
+
 Requires `username`, `password`, `email`, and `balance` in the body.
+
 Example:
 
 ```javascript
@@ -132,21 +137,25 @@ Example:
 ### GET /images/:id
 
 Used to get a specific image
+
 Requires `id` in the params
 
 ### GET /images
 
 Used to get multiple images
+
 Query accepts `limit`, `page`, `name`, `tag`, `description`, `discount`, and `inventory`. Please see test cases for examples on how they are used.
 
 ### POST /images
 
 Used to create a new image
+
 See test cases on how to call this endpoint
 
 ### PUT /images/:id
 
 Used to update an existing image
+
 Body accepts same fields as POST /images
 
 ### DELETE /images/:id
@@ -160,16 +169,19 @@ Used to fetch a specific transaction
 ### GET /transactions
 
 Used to fetch many transactions
+
 Query accepts `limit`, `page`, `image`, `buyer`, `seller`, `startDate`, and `endDate`. Please see test cases for examples on how they are used.
 
 ### POST /transactions
 
 Used to create a transaction
+
 See test cases on how to call this endpoint
 
 ### PUT /transactions/:id
 
 Used to update an existing transaction
+
 Body accepts the same fields as POST /transactions
 
 ### DELETE /transactions/:id
