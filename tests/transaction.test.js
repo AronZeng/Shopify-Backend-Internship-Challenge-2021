@@ -1016,4 +1016,47 @@ describe("Transaction Tests", () => {
     expect(res.body.data[0].buyer).to.equal(savedUser3._id.toString());
     expect(res.body.data[0].seller).to.equal(savedUser._id.toString());
   });
+  it("Can delete a transaction", async () => {
+    const hashedPassword = bcrypt.hashSync(user.password, 10);
+    const savedUser = await User.create({
+      ...user,
+      password: hashedPassword,
+    });
+    const savedUser2 = await User.create({
+      ...user2,
+      password: hashedPassword,
+    });
+
+    const login = await request(app)
+      .post("/login")
+      .set("Content-Type", "application/json")
+      .send({ username: user.username, password: user.password });
+
+    const imageCreateResponse = await request(app)
+      .post("/images")
+      .set({
+        "Content-Type": "application/json",
+        Authorization: login.body.data.token,
+      })
+      .attach("file", imagePath)
+      .field(image_one);
+
+    const transactionOne = await Transaction.create({
+      ...transaction_one,
+      image: imageCreateResponse.body.data._id,
+      seller: savedUser._id.toString(),
+      buyer: savedUser2._id.toString(),
+    });
+
+    const res = await request(app)
+      .delete("/transactions/" + transactionOne._id)
+      .set({
+        "Content-Type": "application/json",
+        Authorization: login.body.data.token,
+      });
+
+    //Assertions
+    //TODO: find a way to compare the file returned from the api and the original uploaded file
+    expect(res.statusCode).to.equal(200);
+  });
 });

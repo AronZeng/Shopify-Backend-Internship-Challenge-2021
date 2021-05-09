@@ -718,4 +718,69 @@ describe("Image Tests", () => {
     expect(res.body.data[0].owner).to.equal(savedUser._id.toString());
     expect(res.body.data[0].image.data).to.have.property("data");
   });
+  it("Can delete an image", async () => {
+    const hashedPassword = bcrypt.hashSync(user.password, 10);
+    const savedUser = await User.create({
+      ...user,
+      password: hashedPassword,
+    });
+
+    const userLogin = await request(app)
+      .post("/login")
+      .set("Content-Type", "application/json")
+      .send({ username: user.username, password: user.password });
+
+    const userImageOne = await request(app)
+      .post("/images")
+      .set({
+        "Content-Type": "application/json",
+        Authorization: userLogin.body.data.token,
+      })
+      .attach("file", imagePath)
+      .field(image_one);
+
+    const res = await request(app)
+      .delete("/images/" + userImageOne.body.data._id.toString())
+      .set({
+        "Content-Type": "application/json",
+        Authorization: userLogin.body.data.token,
+      });
+
+    //Assertions
+    //TODO: find a way to compare the file returned from the api and the original uploaded file
+    expect(res.statusCode).to.equal(200);
+  });
+  it("Cannot get a deleted image", async () => {
+    const hashedPassword = bcrypt.hashSync(user.password, 10);
+    const savedUser = await User.create({
+      ...user,
+      password: hashedPassword,
+    });
+
+    const userLogin = await request(app)
+      .post("/login")
+      .set("Content-Type", "application/json")
+      .send({ username: user.username, password: user.password });
+
+    const userImageOne = await request(app)
+      .post("/images")
+      .set({
+        "Content-Type": "application/json",
+        Authorization: userLogin.body.data.token,
+      })
+      .attach("file", imagePath)
+      .field({ ...image_one, isDeleted: true });
+
+    const res = await request(app)
+      .get("/images/" + userImageOne.body.data._id.toString())
+      .set({
+        "Content-Type": "application/json",
+        Authorization: userLogin.body.data.token,
+      });
+
+    //Assertions
+    //TODO: find a way to compare the file returned from the api and the original uploaded file
+    expect(res.statusCode).to.equal(400);
+    expect(res.body.message).to.equal("The image was deleted");
+  });
 });

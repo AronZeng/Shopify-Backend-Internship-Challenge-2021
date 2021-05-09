@@ -67,6 +67,9 @@ exports.create = async function (req, res, next) {
       _id: req.body.image,
       owner: req.body.seller,
     });
+    if (image && image.isDeleted) {
+      return generateResponse(res, 400, {}, "Image was deleted");
+    }
     const buyer = await User.findById(req.body.buyer);
     if (
       image &&
@@ -144,6 +147,18 @@ exports.update = async function (req, res, next) {
       { new: true }
     );
     return generateResponse(res, 200, resObj);
+  } catch (err) {
+    return generateResponse(res, 500);
+  }
+};
+
+exports.delete = async function (req, res, next) {
+  try {
+    const deletedTransaction = await Transaction.findByIdAndUpdate(
+      req.params.id,
+      { isDeleted: true }
+    );
+    return generateResponse(res, 200);
   } catch (err) {
     return generateResponse(res, 500);
   }

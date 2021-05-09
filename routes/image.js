@@ -13,5 +13,6 @@ router.get("/:id", validateToken, imageController.readOne);
 router.get("/", validateToken, imageController.readMany);
 router.post("/", validateToken, upload.single("file"), imageController.create);
 router.put("/:id", validateToken, imageController.update);
+router.delete("/:id", validateToken, imageController.delete);
 
 module.exports = router;

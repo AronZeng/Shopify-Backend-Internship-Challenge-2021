@@ -7,7 +7,10 @@ const { request } = require("express");
 
 exports.readOne = async function (req, res, next) {
   try {
-    const image = await Image.findById(req.params.id);
+    const image = await Image.findOne({ _id: req.params.id });
+    if (image.isDeleted) {
+      return generateResponse(res, 400, {}, "The image was deleted");
+    }
     if (
       jwt.decode(req.headers["authorization"]).userId == image.owner.toString()
     ) {
@@ -60,6 +63,7 @@ exports.readMany = async function (req, res, next) {
       ? {
           $and: [
             { isAvailable: true },
+            { isDeleted: false },
             { $or: [{ owner: userId }, { public: true }] },
             { $or: filters },
           ],
@@ -67,6 +71,7 @@ exports.readMany = async function (req, res, next) {
       : {
           $and: [
             { isAvailable: true },
+            { isDeleted: false },
             { $or: [{ owner: userId }, { public: true }] },
           ],
         };
@@ -101,6 +106,17 @@ exports.update = async function (req, res, next) {
       { new: true }
     );
     return generateResponse(res, 200, updatedImage);
+  } catch (err) {
+    return generateResponse(res, 500);
+  }
+};
+
+exports.delete = async function (req, res, next) {
+  try {
+    const deletedImage = await Image.findByIdAndUpdate(req.params.id, {
+      isDeleted: true,
+    });
+    return generateResponse(res, 200);
   } catch (err) {
     return generateResponse(res, 500);
   }

@@ -14,6 +14,7 @@ const imageSchema = Schema({
     contentType: String,
   },
   isAvailable: { type: Boolean, default: true },
+  isDeleted: { type: Boolean, default: false },
 });
 
 const Image = mongoose.model("image", imageSchema);

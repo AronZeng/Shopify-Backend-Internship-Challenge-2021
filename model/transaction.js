@@ -9,7 +9,14 @@ const transactionSchema = Schema({
   price: Number,
   image: { type: Schema.Types.ObjectId, ref: "image", required: true },
   date: { type: Date, default: new Date() },
-  quantity: Number,
+  quantity: {
+    type: Number,
+    min: 1,
+    validate: {
+      validator: Number.isInteger,
+      message: "quantity must be an integer",
+    },
+  },
   isDeleted: { type: Boolean, default: false },
   status: { type: Number, default: 0, enum: statuses },
 });
